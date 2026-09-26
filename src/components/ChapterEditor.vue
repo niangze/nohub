@@ -13,10 +13,42 @@
         <span>{{ wordCount }} 字</span>
         <span>{{ saveStatus }}</span>
         <span v-if="chapter.updatedAt">更新于 {{ fmtTime(chapter.updatedAt) }}</span>
+        <span style="flex:1"></span>
+        <el-popover placement="bottom-end" :width="264" trigger="click">
+          <template #reference>
+            <span class="pref-trigger">排版</span>
+          </template>
+          <div class="pref-panel">
+            <div class="pref-row">
+              <span>首行自动空两格</span>
+              <el-switch v-model="prefs.indent" />
+            </div>
+            <div class="pref-row">
+              <span>显示行线（下划线）</span>
+              <el-switch v-model="prefs.ruled" />
+            </div>
+            <div class="pref-col">
+              <span class="pref-label">段落间距</span>
+              <el-radio-group v-model="prefs.spacing" size="small">
+                <el-radio-button value="tight">紧凑</el-radio-button>
+                <el-radio-button value="normal">适中</el-radio-button>
+                <el-radio-button value="loose">宽松</el-radio-button>
+              </el-radio-group>
+            </div>
+            <div class="pref-col">
+              <span class="pref-label">正文字号</span>
+              <el-radio-group v-model="prefs.fontSize" size="small">
+                <el-radio-button :value="15">小</el-radio-button>
+                <el-radio-button :value="16">标准</el-radio-button>
+                <el-radio-button :value="18">大</el-radio-button>
+              </el-radio-group>
+            </div>
+          </div>
+        </el-popover>
       </div>
     </div>
 
-    <div class="editor-wrap">
+    <div class="editor-wrap" :class="editorClasses">
       <Toolbar :editor="editorRef" :defaultConfig="toolbarConfig" mode="default" />
       <Editor
         v-model="valueHtml"
@@ -30,7 +62,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
+import { computed, onBeforeUnmount, reactive, ref, shallowRef, watch } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { useStore } from '../store'
 
@@ -47,6 +79,21 @@ const editorRef = shallowRef(null)
 const saveStatus = ref('已保存')
 let saveTimer = null
 let baseline = props.chapter.content || ''
+
+// ---------- 排版偏好（全局记忆，存 localStorage） ----------
+const PREFS_KEY = 'ink-editor-prefs'
+const prefs = reactive(Object.assign(
+  { indent: true, ruled: false, spacing: 'normal', fontSize: 16 },
+  JSON.parse(localStorage.getItem(PREFS_KEY) || '{}')
+))
+watch(prefs, v => localStorage.setItem(PREFS_KEY, JSON.stringify(v)), { deep: true })
+
+const editorClasses = computed(() => ({
+  'pref-indent': prefs.indent,
+  'pref-ruled': prefs.ruled,
+  [`pref-spacing-${prefs.spacing}`]: true,
+  [`pref-font-${prefs.fontSize}`]: true
+}))
 
 const toolbarConfig = {
   excludeKeys: ['insertVideo', 'uploadVideo', 'codeBlock', 'emotion', 'group-video']
@@ -118,6 +165,16 @@ onBeforeUnmount(() => {
 }
 .title-input:hover, .title-input:focus { border-bottom-color: var(--line-2); }
 .chapter-meta {
-  display: flex; gap: 16px; font-size: 12px; margin-top: 8px;
+  display: flex; gap: 16px; font-size: 12px; margin-top: 8px; align-items: center;
 }
+.pref-trigger {
+  cursor: pointer; font-size: 12px; color: var(--ink-3);
+  padding: 2px 8px; border: 1px solid var(--line); border-radius: 999px;
+  transition: all .15s;
+}
+.pref-trigger:hover { color: var(--accent); border-color: var(--accent); }
+.pref-panel { display: flex; flex-direction: column; gap: 14px; }
+.pref-row { display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
+.pref-col { display: flex; flex-direction: column; gap: 8px; }
+.pref-label { font-size: 12px; color: var(--ink-3); }
 </style>
