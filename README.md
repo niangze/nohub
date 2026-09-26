@@ -1,2 +1,35 @@
-# nohub
-墨阁 InkAtelier — 个人小说创作资料管理工具：书架、卷章管理、人物卡、世界观设定（Vue 3 + Element Plus + Dexie/IndexedDB）
+# 墨阁 InkAtelier
+
+个人私用的小说创作资料管理工具。纯前端应用，所有数据保存在浏览器 IndexedDB 中，无需后端与数据库。
+
+## 功能
+
+- **书架**：多本作品管理（书名、简介、封面、连载状态）
+- **卷章管理**：卷/章两级目录树，支持拖拽排序、改名、删除
+- **章节写作**：富文本编辑器，自动保存，实时字数统计
+- **人物卡**：基础信息、外貌、性格、背景、爱好、口头禅、人际关系，支持形象照片与参考图
+- **世界观**：历史大事件（按时间排序）、力量体系（按层级排序）、地理格局、奇异珍宝
+- **备份**：单书 / 全库导出 JSON，支持导入恢复（含图片）
+
+## 技术栈
+
+Vue 3 + Vite + Pinia + Vue Router + Element Plus + wangEditor + Dexie.js (IndexedDB)
+
+## 本地运行
+
+```bash
+npm install
+npm run dev
+# 打开 http://localhost:5173
+```
+
+## 构建
+
+```bash
+npm run build
+# 产物在 dist/，用任意静态服务器托管即可，如 npx serve dist
+```
+
+## 数据说明
+
+数据存储在浏览器 IndexedDB（按域名+端口隔离），清除浏览器数据会丢失内容，请定期使用「导出全部」备份。
