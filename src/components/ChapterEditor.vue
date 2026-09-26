@@ -147,7 +147,8 @@ onBeforeUnmount(() => {
 <style scoped>
 .chapter-editor { height: 100%; display: flex; flex-direction: column; }
 .chapter-editor :deep(.editor-wrap) { flex: 1; min-height: 0; }
-.chapter-editor :deep(.editor-wrap > div:not(.w-e-toolbar)) {
+.chapter-editor :deep(.editor-wrap > div[data-w-e-toolbar]) { flex-shrink: 0; }
+.chapter-editor :deep(.editor-wrap > div[data-w-e-textarea]) {
   flex: 1; min-height: 0; display: flex; flex-direction: column;
 }
 .chapter-head {
