@@ -12,7 +12,7 @@
 
     <div class="body">
       <!-- 左侧栏 -->
-      <aside class="sidebar">
+      <aside v-show="!collapsed" class="sidebar">
         <el-tabs v-model="tab" stretch>
           <el-tab-pane label="目录" name="chapters" />
           <el-tab-pane label="人物" name="characters" />
@@ -80,6 +80,16 @@
         </div>
       </aside>
 
+      <!-- 折叠轨：点击收起/展开侧栏 -->
+      <div
+        class="collapse-rail"
+        :class="{ collapsed }"
+        :title="collapsed ? '展开侧栏' : '收起侧栏'"
+        @click="toggleSidebar"
+      >
+        <span class="rail-arrow">{{ collapsed ? '›' : '‹' }}</span>
+      </div>
+
       <!-- 右侧编辑区 -->
       <main class="content">
         <ChapterEditor
@@ -136,6 +146,13 @@ const worldType = ref('event')
 const selectedChapterId = ref(null)
 const selectedCharId = ref(null)
 const selectedWorldId = ref(null)
+
+// 侧栏折叠（记忆）
+const collapsed = ref(localStorage.getItem('ink-sidebar-collapsed') === '1')
+function toggleSidebar() {
+  collapsed.value = !collapsed.value
+  localStorage.setItem('ink-sidebar-collapsed', collapsed.value ? '1' : '0')
+}
 
 const charAvatarUrls = ref({})
 const createdUrls = []
@@ -332,6 +349,24 @@ onUnmounted(() => {
 .type-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
 .side-empty { padding: 30px 10px; text-align: center; font-size: 12.5px; }
+
+.collapse-rail {
+  width: 16px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; user-select: none;
+  border-right: 1px solid var(--line);
+  background: var(--paper);
+  transition: background .15s;
+}
+.collapse-rail.collapsed { border-right: none; }
+.collapse-rail:hover { background: var(--paper-3); }
+.collapse-rail .rail-arrow {
+  font-size: 13px; color: var(--ink-3);
+  width: 16px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 0 8px 8px 0;
+}
+.collapse-rail:hover .rail-arrow { color: var(--accent); }
 
 .content { flex: 1; min-width: 0; }
 </style>
