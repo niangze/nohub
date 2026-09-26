@@ -12,8 +12,7 @@
       <div class="chapter-meta muted">
         <span>{{ wordCount }} 字</span>
         <span>{{ saveStatus }}</span>
-        <span v-if="chapter.updatedAt">更新于 {{ fmtTime(chapter.updatedAt) }}</span>
-        <span style="flex:1"></span>
+        <span v-if="chapter.updatedAt">{{ fmtTime(chapter.updatedAt) }}</span>
         <el-popover placement="bottom-end" :width="264" trigger="click">
           <template #reference>
             <span class="pref-trigger">排版</span>
@@ -152,20 +151,21 @@ onBeforeUnmount(() => {
   flex: 1; min-height: 0; display: flex; flex-direction: column;
 }
 .chapter-head {
-  padding: 18px 44px 10px;
+  padding: 12px 44px 8px;
   flex-shrink: 0;
+  display: flex; align-items: baseline; gap: 18px;
 }
 .title-input {
-  width: 100%;
+  flex: 1; min-width: 0;
   border: none; outline: none; background: transparent;
-  font-size: 24px; font-weight: 700; color: var(--ink);
+  font-size: 22px; font-weight: 700; color: var(--ink);
   border-bottom: 1px solid transparent;
-  padding: 2px 0 6px;
+  padding: 2px 0 4px;
   transition: border-color .2s;
 }
 .title-input:hover, .title-input:focus { border-bottom-color: var(--line-2); }
 .chapter-meta {
-  display: flex; gap: 16px; font-size: 12px; margin-top: 8px; align-items: center;
+  display: flex; gap: 14px; font-size: 12px; align-items: center; flex-shrink: 0;
 }
 .pref-trigger {
   cursor: pointer; font-size: 12px; color: var(--ink-3);

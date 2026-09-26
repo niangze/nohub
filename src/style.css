@@ -87,7 +87,15 @@ body {
 .tree-node .wc { font-size: 11px; color: var(--ink-3); margin-left: 6px; flex-shrink: 0; }
 
 /* ========== wangEditor ========== */
-.w-e-full-screen-container { z-index: 2000; }
+.w-e-full-screen-container {
+  position: fixed !important;
+  top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+  width: 100% !important; height: 100% !important;
+  z-index: 2000 !important;
+  background: var(--paper-2);
+  display: flex !important; flex-direction: column;
+}
+.w-e-full-screen-container .w-e-text-container { flex: 1; overflow-y: auto; }
 .editor-wrap { border: none; height: 100%; display: flex; flex-direction: column; --lh: 32px; }
 .editor-wrap .w-e-toolbar {
   border-bottom: 1px solid var(--line) !important;
@@ -100,7 +108,7 @@ body {
   overflow-y: auto;
 }
 .editor-wrap .w-e-text-container [data-slate-editor] {
-  padding: 28px 44px;
+  padding: 18px 44px 60px;
   font-size: 16px;
   line-height: 2;
   color: var(--ink);
@@ -133,7 +141,7 @@ body {
     var(--line) var(--lh)
   );
   background-attachment: local;
-  background-position-y: 29px;
+  background-position-y: 19px;
 }
 
 /* ========== 滚动条 ========== */
